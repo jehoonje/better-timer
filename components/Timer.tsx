@@ -122,7 +122,7 @@ export default function Timer() {
             outline: 'none',
             transition: 'all 0.1s ease'
           }}
-          onMouseDown={(e) => {
+          onMouseDown={(e:any) => {
             e.target.style.boxShadow = `
               inset 0 0 2px 2px hsla(0,0%,0%,.2),
               inset 0 0 2px 4px hsla(0,0%,0%,.2),
@@ -143,7 +143,7 @@ export default function Timer() {
               0 -1px 2px 8px hsla(0,0%,0%,.5)
             `;
           }}
-          onMouseUp={(e) => {
+          onMouseUp={(e:any) => {
             e.target.style.boxShadow = `
               inset 0 0 2px 2px hsla(0,0%,0%,.2),
               inset 0 0 2px 4px hsla(0,0%,0%,.2),
@@ -210,7 +210,7 @@ export default function Timer() {
             cursor: status === 'idle' ? 'not-allowed' : 'pointer',
             transition: 'all 0.1s ease'
           }}
-          onMouseDown={status !== 'idle' ? (e) => {
+          onMouseDown={status !== 'idle' ? (e:any) => {
             e.target.style.boxShadow = `
               inset 0 0 1px 1px hsla(0,0%,0%,.2),
               inset 0 0 1px 2px hsla(0,0%,0%,.2),
@@ -231,7 +231,7 @@ export default function Timer() {
               0 -1px 1px 4px hsla(0,0%,0%,.5)
             `;
           } : undefined}
-          onMouseUp={status !== 'idle' ? (e) => {
+          onMouseUp={status !== 'idle' ? (e:any) => {
             e.target.style.boxShadow = `
               inset 0 0 1px 1px hsla(0,0%,0%,.2),
               inset 0 0 1px 2px hsla(0,0%,0%,.2),
