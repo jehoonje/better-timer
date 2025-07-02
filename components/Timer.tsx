@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useTimerStore } from '@/store/timerStore';
-import { formatTime } from '@/utils/formatTime';
+import { useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useTimerStore } from "@/store/timerStore";
+import { formatTime } from "@/utils/formatTime";
 
 export default function Timer() {
   const {
@@ -15,42 +15,51 @@ export default function Timer() {
     startTimer,
     pauseTimer,
     resetTimer,
-    switchTimer
+    switchTimer,
   } = useTimerStore();
 
-  const isExercise = timerType === 'exercise';
-  const buttonColor = isExercise ? 'bg-gray-700 hover:bg-gray-800' : 'bg-red-700 hover:bg-red-800';
-  const buttonActiveColor = isExercise ? 'active:bg-gray-900' : 'active:bg-red-900';
+  const isExercise = timerType === "exercise";
+  const buttonColor = isExercise
+    ? "bg-gray-700 hover:bg-gray-800"
+    : "bg-red-700 hover:bg-red-800";
+  const buttonActiveColor = isExercise
+    ? "active:bg-gray-900"
+    : "active:bg-red-900";
 
   const handleMainButtonClick = () => {
-    if (status === 'idle' || status === 'paused') {
-      startTimer('exercise');
-    } else if (status === 'running') {
+    if (status === "idle" || status === "paused") {
+      startTimer("exercise");
+    } else if (status === "running") {
       switchTimer();
     }
   };
 
   const formattedTime = formatTime(seconds);
-  const timeDigits = formattedTime.split('');
+  const timeDigits = formattedTime.split("");
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center relative bg-black">
       {/* Set 표시 - 상단 */}
       <div className="absolute top-16 left-1/2 transform -translate-x-1/2 text-center">
-        <motion.h1 
-          className="text-4xl font-light text-white mb-2"
-          key={currentSet}
-          initial={{ scale: 0.8 }}
-          animate={{ scale: 1 }}
-          transition={{ type: "spring", stiffness: 200 }}
-        >
-          SET {currentSet}
-        </motion.h1>
-        
+        <AnimatePresence mode="wait">
+          {status === "running" && (
+            <motion.h1
+              key={currentSet}
+              className="text-4xl font-light text-white mb-2"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.6 }}
+            >
+              SET {currentSet}
+            </motion.h1>
+          )}
+        </AnimatePresence>
+
         {/* 직전 휴식 시간 표시 */}
         <AnimatePresence mode="wait">
-          {lastRestTime !== '00:00' && (
-            <motion.p 
+          {status === "running" && lastRestTime !== "00:00" && (
+            <motion.p
               className="text-xl text-white/80"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -69,12 +78,13 @@ export default function Timer() {
             <span
               key={index}
               className={`text-7xl font-thin text-white ${
-                digit === ':' ? 'mx-1' : ''
+                digit === ":" ? "mx-1" : ""
               }`}
               style={{
-                fontFamily: '-apple-system, SF Pro Display, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-                fontVariantNumeric: 'tabular-nums',
-                textShadow: '0 4px 20px rgba(255,255,255,0.3)'
+                fontFamily:
+                  '-apple-system, SF Pro Display, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                fontVariantNumeric: "tabular-nums",
+                textShadow: "0 4px 20px rgba(255,255,255,0.3)",
               }}
             >
               {digit}
@@ -90,11 +100,12 @@ export default function Timer() {
           className="text-white font-bold cursor-pointer flex flex-col items-center justify-center"
           whileTap={{ scale: 0.98 }}
           style={{
-            width: '240px',
-            height: '240px',
-            background: (status === 'idle' || status === 'paused') ? '#b91c1c' : '#444',
-            border: 'none',
-            borderRadius: '160px',
+            width: "200px",
+            height: "200px",
+            background:
+              status === "idle" || status === "paused" ? "#b91c1c" : "#444",
+            border: "none",
+            borderRadius: "160px",
             boxShadow: `
               inset 0 0 2px 2px hsla(0,0%,0%,.2),
               inset 0 0 2px 4px hsla(0,0%,0%,.2),
@@ -112,17 +123,18 @@ export default function Timer() {
               0 1px 2px 8px hsla(0,0%,100%,.25),
               0 -1px 2px 8px hsla(0,0%,0%,.5)
             `,
-            color: (status === 'idle' || status === 'paused') ? '#fff' : '#303030',
+            color:
+              status === "idle" || status === "paused" ? "#fff" : "#303030",
             textShadow: `
               0 1px 1px hsla(0,0%,100%,.25),
               0 -1px 1px hsla(0,0%,0%,.75)
             `,
-            fontSize: '40px',
-            padding: '0',
-            outline: 'none',
-            transition: 'all 0.1s ease'
+            fontSize: "34px",
+            padding: "0",
+            outline: "none",
+            transition: "all 0.1s ease",
           }}
-          onMouseDown={(e:any) => {
+          onMouseDown={(e: any) => {
             e.target.style.boxShadow = `
               inset 0 0 2px 2px hsla(0,0%,0%,.2),
               inset 0 0 2px 4px hsla(0,0%,0%,.2),
@@ -143,7 +155,7 @@ export default function Timer() {
               0 -1px 2px 8px hsla(0,0%,0%,.5)
             `;
           }}
-          onMouseUp={(e:any) => {
+          onMouseUp={(e: any) => {
             e.target.style.boxShadow = `
               inset 0 0 2px 2px hsla(0,0%,0%,.2),
               inset 0 0 2px 4px hsla(0,0%,0%,.2),
@@ -163,25 +175,38 @@ export default function Timer() {
             `;
           }}
         >
-          {status === 'idle' || status === 'paused' ? (currentSet === 1 ? 'Start' : 'Next Set') : 
-           isExercise ? 'Break' : 'Next Set'}
+          {status === "idle" || status === "paused"
+            ? currentSet === 1
+              ? "Start"
+              : "Next Set"
+            : isExercise
+            ? "Break"
+            : "Next Set"}
         </motion.button>
       </div>
 
+      <motion.div className="absolute top-3/4 w-[80%] border border-white/15"></motion.div>
+
       {/* 하단 버튼 */}
-      <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2">
+      <div className="absolute bottom-14 left-1/2 transform -translate-x-1/2">
+        
         <motion.button
-          onClick={status === 'paused' ? resetTimer : pauseTimer}
-          disabled={status === 'idle'}
-          className="text-white font-bold cursor-pointer"
-          whileTap={status !== 'idle' ? { scale: 0.98 } : {}}
+          onClick={status === "paused" ? resetTimer : pauseTimer}
+          disabled={status === "idle"}
+          className={`text-white ${
+            status === "idle" ? "hidden" : ""
+          } font-bold cursor-pointer`}
+          whileTap={status !== "idle" ? { scale: 0.98 } : {}}
           style={{
-            width: '160px',
-            height: '60px',
-            background: status === 'idle' ? '#666' : '#888',
-            border: 'none',
-            borderRadius: '30px',
-            boxShadow: status === 'idle' ? 'none' : `
+            width: "160px",
+            height: "60px",
+            background: status === "idle" ? "#666" : "#888",
+            border: "none",
+            borderRadius: "30px",
+            boxShadow:
+              status === "idle"
+                ? "none"
+                : `
               inset 0 0 1px 1px hsla(0,0%,0%,.2),
               inset 0 0 1px 2px hsla(0,0%,0%,.2),
               inset 0 0 1px 3px hsla(0,0%,0%,.2),
@@ -198,20 +223,25 @@ export default function Timer() {
               0 1px 1px 4px hsla(0,0%,100%,.25),
               0 -1px 1px 4px hsla(0,0%,0%,.5)
             `,
-            color: status === 'idle' ? '#444' : '#303030',
-            textShadow: status === 'idle' ? 'none' : `
+            color: status === "idle" ? "#444" : "#303030",
+            textShadow:
+              status === "idle"
+                ? "none"
+                : `
               0 1px 1px hsla(0,0%,100%,.25),
               0 -1px 1px hsla(0,0%,0%,.75)
             `,
-            fontSize: '18px',
-            padding: '0',
-            outline: 'none',
-            opacity: status === 'idle' ? 0.5 : 1,
-            cursor: status === 'idle' ? 'not-allowed' : 'pointer',
-            transition: 'all 0.1s ease'
+            fontSize: "18px",
+            padding: "0",
+            outline: "none",
+            opacity: status === "idle" ? 0.5 : 1,
+            cursor: status === "idle" ? "not-allowed" : "pointer",
+            transition: "all 0.1s ease",
           }}
-          onMouseDown={status !== 'idle' ? (e:any) => {
-            e.target.style.boxShadow = `
+          onMouseDown={
+            status !== "idle"
+              ? (e: any) => {
+                  e.target.style.boxShadow = `
               inset 0 0 1px 1px hsla(0,0%,0%,.2),
               inset 0 0 1px 2px hsla(0,0%,0%,.2),
               inset 0 0 1px 3px hsla(0,0%,0%,.2),
@@ -230,9 +260,13 @@ export default function Timer() {
               0 1px 1px 4px hsla(0,0%,100%,.25),
               0 -1px 1px 4px hsla(0,0%,0%,.5)
             `;
-          } : undefined}
-          onMouseUp={status !== 'idle' ? (e:any) => {
-            e.target.style.boxShadow = `
+                }
+              : undefined
+          }
+          onMouseUp={
+            status !== "idle"
+              ? (e: any) => {
+                  e.target.style.boxShadow = `
               inset 0 0 1px 1px hsla(0,0%,0%,.2),
               inset 0 0 1px 2px hsla(0,0%,0%,.2),
               inset 0 0 1px 3px hsla(0,0%,0%,.2),
@@ -249,9 +283,11 @@ export default function Timer() {
               0 1px 1px 4px hsla(0,0%,100%,.25),
               0 -1px 1px 4px hsla(0,0%,0%,.5)
             `;
-          } : undefined}
+                }
+              : undefined
+          }
         >
-          {status === 'paused' ? 'Reset' : 'Finish'}
+          {status === "paused" ? "Reset" : "Finish"}
         </motion.button>
       </div>
     </div>
